@@ -2,9 +2,10 @@
   "expo": {
     "name": "healthcare-app",
     "slug": "healthcare-app",
+    "scheme" : "healthcare-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/health-care-app-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
