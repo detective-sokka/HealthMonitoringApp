@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, Image } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Login from '../../components/Login';
 
 import { images } from '../../constants';
 import FormField from '../../components/FormField';
@@ -20,7 +21,7 @@ const SignIn = () => {
             Log in to <Text className="text-secondary-200">Health Care</Text>
           </Text>
 
-          <FormField />
+          <Login />
       </View>
       </ScrollView>
     </SafeAreaView>
