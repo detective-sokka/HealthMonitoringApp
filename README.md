@@ -1,5 +1,5 @@
 # HealthMonitoringApp
-This is a cross-platform healthcare application built to give the user situational awareness of his surrounding. 
+This is a cross-platform healthcare application built to give the user situational awareness of their surrounding. 
 
 ## How to setup?
 
