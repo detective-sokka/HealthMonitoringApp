@@ -4,7 +4,7 @@ import React from 'react'
 const Bookmark = () => {
   return (
     <View>
-      <Text>B</Text>
+      <Text>Bookmark</Text>
     </View>
   )
 }

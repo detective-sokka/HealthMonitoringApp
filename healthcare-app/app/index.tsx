@@ -63,12 +63,8 @@ export default function App() {
               Home
             </Link>
           </View>  
-
-
-
         </View>
-        
-
+      
         <StatusBar backgroundColor="#161622" style="light" />
       </ScrollView>
 
