@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button, Image, ScrollView } from 'react-native';
-import { TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import { Redirect, router } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -53,9 +52,22 @@ export default function App() {
             containerStyles="w-full mt-7"
           />
 
+          <View className="flex justify-center pt-5 flex-row gap-2">
+            <Text className="text-lg text-gray-100 font-pregular">
+              Go to
+            </Text>
+            <Link
+              href="/home"
+              className="text-lg font-psemibold text-secondary"
+            >
+              Home
+            </Link>
+          </View>  
+
 
 
         </View>
+        
 
         <StatusBar backgroundColor="#161622" style="light" />
       </ScrollView>
