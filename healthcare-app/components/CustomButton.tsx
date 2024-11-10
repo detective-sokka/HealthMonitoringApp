@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
 interface CustomButtonProps {
   title: string;
