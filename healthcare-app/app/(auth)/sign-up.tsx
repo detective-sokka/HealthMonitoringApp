@@ -31,10 +31,6 @@ const SignUp = () => {
 
     setSubmitting(true);
     try {
-      // const result = await createUser(form.email, form.password, form.username);
-      // setUser(result);
-      // setIsLogged(true);
-
       router.replace("/home");
     } catch (error: any) {
       Alert.alert("Error", error.message);
@@ -59,7 +55,7 @@ const SignUp = () => {
           />
 
           <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Sign Up to Aora
+            Sign Up
           </Text>
 
           <FormField
