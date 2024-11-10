@@ -52,7 +52,7 @@ const SignIn = () => {
           />
 
           <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Log in to <Text className="text-secondary-200">Health Care</Text>
+            Log in
           </Text>
 
           <FormField
