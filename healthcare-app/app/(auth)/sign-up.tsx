@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'; 
 
 import { images } from "../../constants";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
+
 
 interface FormData {
   username: string;
@@ -14,8 +17,6 @@ interface FormData {
 }
 
 const SignUp = () => {
-  // const { setUser, setIsLogged } = useGlobalContext();
-
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
   const [form, setForm] = useState<FormData>({
     username: "",
@@ -30,11 +31,18 @@ const SignUp = () => {
     }
 
     setSubmitting(true);
-    try {
-      // const result = await createUser(form.email, form.password, form.username);
-      // setUser(result);
-      // setIsLogged(true);
 
+    try {
+      const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, form.email, form.password);            
+      console.log(response);            
+    } catch (error:any) {
+      console.log(error);
+      alert('Sign up failed: ' + error.message);
+      setSubmitting(false);
+      return;
+    } 
+
+    try {
       router.replace("/home");
     } catch (error: any) {
       Alert.alert("Error", error.message);
@@ -59,7 +67,7 @@ const SignUp = () => {
           />
 
           <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Sign Up to Aora
+            Sign Up
           </Text>
 
           <FormField

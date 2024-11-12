@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
-import { Redirect, router } from "expo-router";
+import { router } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { images } from '../constants';
 import CustomButton from '../components/CustomButton';
 
 export default function App() {
+
   return (
     <SafeAreaView style={{ backgroundColor: "#7B97A3", height: "100%" }}>
       <ScrollView
