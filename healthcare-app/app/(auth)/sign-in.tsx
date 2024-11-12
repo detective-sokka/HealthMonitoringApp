@@ -7,6 +7,9 @@ import { images } from '../../constants';
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import { FIREBASE_AUTH } from "../../firebaseConfig";
+
 interface FormData {
   email: string;
   password: string;
@@ -15,8 +18,8 @@ interface FormData {
 const SignIn = () => {
   const [form, setForm] = useState<FormData>({ email: "", password: "" });
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
-  const [user, setUser] = useState<any>(null); // Update with the correct type if known
-  const [isLogged, setIsLogged] = useState<boolean>(false);
+
+  const auth = FIREBASE_AUTH; 
 
   const submit = async () => {
     if (form.email === "" || form.password === "") {
@@ -25,13 +28,17 @@ const SignIn = () => {
     }
 
     setSubmitting(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, form.email, form.password);
+      console.log(response);
+    } catch (error:any) {
+      console.log(error);
+      Alert.alert("Login failed : " + error.message);
+      setSubmitting(false);
+      return;
+    }
 
     try {
-      // await signIn(form.email, form.password);
-      // const result = await getCurrentUser();
-      // setUser(result);
-      setIsLogged(true);
-
       Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
     } catch (error: any) {
