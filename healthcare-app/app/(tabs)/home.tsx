@@ -21,21 +21,32 @@ const requestLocationPermission = async () => {
 const Home = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
 
-  // Use useEffect to handle location permission and retrieval
   useEffect(() => {
+    let isMounted = true; // Track whether the component is mounted
+
     const getLocation = async () => {
       const hasPermission = await requestLocationPermission();
       if (hasPermission) {
-        // Get the current position using expo-location
-        const currentLocation = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.High,
-        });
-        setLocation(currentLocation);
+        try {
+          const currentLocation = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+          });
+          if (isMounted) {
+            setLocation(currentLocation);
+          }
+        } catch (error) {
+          console.error('Error getting location:', error);
+        }
       }
     };
 
     getLocation();
-  }, []); // Empty dependency array ensures this runs once on component mount
+
+    // Cleanup function to set isMounted to false on component unmount
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <View>
