@@ -2,21 +2,8 @@ import { View, Text } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Accuracy, LocationObject, getCurrentPositionAsync } from 'expo-location';
 
-const requestLocationPermission = async () => {
-  try {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status === 'granted') {
-      console.log('You can use Geolocation');
-      return true;
-    } else {
-      console.log('You cannot use Geolocation');
-      return false;
-    }
-  } catch (err) {
-    console.error('Error requesting location permission:', err);
-    return false;
-  }
-};
+import fetchAirPollutionData, { AirPollutionData } from '../../utils/fetchAirPollutionData';
+import requestLocationPermission from '../../utils/requestLocationPermission';
 
 const Home = () => {
   const [location, setLocation] = useState<LocationObject | null>(null);
