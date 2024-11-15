@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import * as Location from 'expo-location';
+import { Accuracy, LocationObject, getCurrentPositionAsync } from 'expo-location';
 
 const requestLocationPermission = async () => {
   try {
@@ -19,7 +19,7 @@ const requestLocationPermission = async () => {
 };
 
 const Home = () => {
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [location, setLocation] = useState<LocationObject | null>(null);
 
   useEffect(() => {
     let isMounted = true; // Track whether the component is mounted
@@ -28,8 +28,8 @@ const Home = () => {
       const hasPermission = await requestLocationPermission();
       if (hasPermission) {
         try {
-          const currentLocation = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.High,
+          const currentLocation = await getCurrentPositionAsync({
+            accuracy: Accuracy.High,
           });
           if (isMounted) {
             setLocation(currentLocation);
