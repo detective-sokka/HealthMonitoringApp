@@ -40,3 +40,6 @@ ios/
 package-lock.json
 
 .env
+
+# Jest test case coverage
+coverage/
