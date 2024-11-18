@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-import { OPENWEATHER_API_KEY } from "@env";
-
-const API_KEY = OPENWEATHER_API_KEY; // Replace with your actual OpenWeather API key
+const API_KEY = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY; // Replace with your actual OpenWeather API key
 
 /**
  * Fetches air pollution data from the OpenWeather API based on latitude and longitude.
