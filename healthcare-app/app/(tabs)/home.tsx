@@ -4,15 +4,33 @@ import SearchBar from '../../components/SearchBar';
 import Tile from '../../components/Tile';
 import { Accuracy, LocationObject, getCurrentPositionAsync } from 'expo-location';
 import requestLocationPermission from '../../utils/requestLocationPermission';
+import fetchAirPollutionData, { AirPollutionData } from '../../utils/fetchAirPollutionData';
 
 const Home = () => {
   const [location, setLocation] = useState<LocationObject | null>(null);
+  const [airPollutionData, setAirPollutionData] = useState<AirPollutionData | null>(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getLocation();
   }, []);
+
+  useEffect(() => {
+
+    if (location)
+    {
+      fetchAirPollutionData(
+        location.coords.latitude,
+        location.coords.longitude
+      ).then((data) => {
+        if (data) {
+          setAirPollutionData(data);
+        }
+      }).catch((error) => console.error('Error in getLocation:', error));
+    } 
+  }, [location]);
 
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
@@ -63,19 +81,19 @@ const Home = () => {
           <Text style={styles.sectionTitle}>Air Quality</Text>
           <Tile
             label="PM10"
-            value="45"
+            value={airPollutionData? airPollutionData?.pm10 : ""}
             description="Particulate matter up to 10 micrometers"
             backgroundColor="rgba(255, 160, 122, 0.8)"
           />
           <Tile
             label="PM2.5"
-            value="30"
+            value={airPollutionData? airPollutionData?.pm2_5 : ""}
             description="Fine particulate matter concentration"
             backgroundColor="rgba(32, 178, 170, 0.8)"
           />
           <Tile
             label="AQI"
-            value="80"
+            value={airPollutionData? airPollutionData?.aqi : ""}
             description="Overall air quality measurement"
             backgroundColor="rgba(255, 99, 71, 0.8)"
           />
