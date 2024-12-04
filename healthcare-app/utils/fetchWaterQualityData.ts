@@ -1,5 +1,5 @@
 import axios from "axios";
-import { parse } from "csv-parse/dist/esm/sync";
+import { parse } from "csv-parse/sync";
 
 export interface WaterQualityData {
   pH: number;
@@ -60,7 +60,7 @@ const fetchWaterQualityData = async (
       } MPN/100mL`,
     };
   } catch (error) {
-    console.error("Error fetching water quality data:", error);
+    console.log("Error fetching water quality data");
     return null;
   }
 };
