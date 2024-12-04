@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, Text, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import Dropdown from "../../components/Dropdown";
 import SeveritySlider from "../../components/SeveritySlider";
 import WitnessSlider from "../../components/WitnessSlider";
@@ -22,31 +22,33 @@ const Create = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Report COVID Observation</Text>
+    <SafeAreaView>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Report COVID Observation</Text>
 
-      {/* Dropdown for Observation Type */}
-      <Dropdown
-        options={["Observed Someone", "Personal Experience"]}
-        selectedOption={observationType}
-        onSelectOption={setObservationType}
-        label="Type of Observation"
-      />
+        {/* Dropdown for Observation Type */}
+        <Dropdown
+          options={["Observed Someone", "Personal Experience"]}
+          selectedOption={observationType}
+          onSelectOption={setObservationType}
+          label="Type of Observation"
+        />
 
-      {/* Severity Slider */}
-      <SeveritySlider value={severity} onChange={setSeverity} />
+        {/* Severity Slider */}
+        <SeveritySlider value={severity} onChange={setSeverity} />
 
-      {/* Witnessed Count Slider */}
-      <WitnessSlider value={witnessedCount} onChange={setWitnessedCount} />
+        {/* Witnessed Count Slider */}
+        <WitnessSlider value={witnessedCount} onChange={setWitnessedCount} />
 
-      {/* Location Selector */}
-      <LocationSelector location={location} onLocationChange={setLocation} />
+        {/* Location Selector */}
+        <LocationSelector location={location} onLocationChange={setLocation} />
 
-      {/* Submit Button */}
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitText}>Submit Report</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* Submit Button */}
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitText}>Submit Report</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      </SafeAreaView>
   );
 };
 

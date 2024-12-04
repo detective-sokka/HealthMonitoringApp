@@ -1,18 +1,17 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, ScrollView, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, Button, Alert, SafeAreaView } from 'react-native';
 import ProfileHeader from '../../components/ProfileHeader';
-import ButtonRow from '../../components/ButtonRow';
-import SavedLocationList from '../../components/SavedLocationList';
 import { useAuth } from '../../context/AuthContext';
 import { router } from 'expo-router';
 import CustomButton from '../../components/CustomButton';
+import requestLocationPermission from '../../utils/requestLocationPermission';
+import { Accuracy, LocationObject, getCurrentPositionAsync } from 'expo-location';
+import { icons } from '../../constants';
 
-const Profile = () => {
-
-  const { user, signOut } = useAuth();
-  console.log('Current user:', user);
-  const username = user?.email?.split('@')[0] || 'User';
-  console.log('Username:', username);
+const Profile: React.FC = () => {
+  const { user, updateUserProfile, signOut } = useAuth();
+  const [username, setUsername] = useState<string>(user?.email?.split('@')[0] || 'User');
+  const [location, setLocation] = useState<LocationObject | null>(null);
 
   const handleLogout = async () => {
     try {
@@ -23,77 +22,95 @@ const Profile = () => {
     }
   };
 
-  
-  const savedLocations = ['Latitude: 12.9716, Longitude: 77.5946', 'Latitude: 34.0522, Longitude: -118.2437'];
-
-  const handleUpdateProfile = () => console.log('Update Profile');
-  const handleSettings = () => console.log('Settings');
-  const handleEdit = () => console.log('Edit');
-
   const handleAddMedicalData = () => console.log('Add Medical Data');
   const handleRaiseAwareness = () => console.log('Raise Awareness');
 
+  useEffect(() => {
+    getLocation();
+  }, []);
+
+  const getLocation = async () => {
+    const hasPermission = await requestLocationPermission();
+    if (hasPermission) {
+      try {
+        const currentLocation = await getCurrentPositionAsync({ accuracy: Accuracy.High });
+        setLocation(currentLocation);
+      } catch (error) {
+        console.error('Error getting location:', error);
+      }
+    }
+  };
+
+  const handleSaveName = async (newName: string) => {
+    try {
+      await updateUserProfile(newName);
+      setUsername(newName);
+    } catch (error) {
+      Alert.alert("Error", "Failed to update name");
+    }
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Profile Header */}
-      <ProfileHeader
-        name="John Doe"
-        photo="https://via.placeholder.com/100" // Replace with user's profile photo URL
+    <SafeAreaView style={styles.safeArea}>
+      <FlatList
+        data={[{ key: 'content' }]}
+        renderItem={() => (
+          <View style={styles.container}>
+            <ProfileHeader
+              name={username}
+              photo={icons.profile}
+              email={user?.email || ''}
+              onSaveName={handleSaveName}
+            />
+            <View style={styles.locationContainer}>
+              <Text style={styles.locationText}>Home</Text>
+              <Text style={styles.locationDetail}>
+                Latitude: {location?.coords.latitude.toFixed(2)}, 
+                Longitude: {location?.coords.longitude.toFixed(2)}
+              </Text>
+            </View>
+            <View style={styles.postsContainer}>
+              <Text style={styles.title}>Previous Posts</Text>
+              <Button title="Raise Awareness" onPress={handleRaiseAwareness} />
+              <Text style={styles.postText}>No posts yet.</Text>
+            </View>
+            <View style={styles.medicalDataContainer}>
+              <Text style={styles.title}>Medical Data</Text>
+              <Button title="Add Medical Data" onPress={handleAddMedicalData} />
+            </View>
+            <CustomButton
+              title="Logout"
+              handlePress={handleLogout}
+              containerStyles="mt-4"
+            />
+          </View>
+        )}
       />
-
-      {/* Button Row */}
-      <ButtonRow
-        buttons={[
-          { title: 'Update Profile', onPress: handleUpdateProfile },
-          { title: 'Settings', onPress: handleSettings },
-          { title: 'Edit', onPress: handleEdit },
-        ]}
-      />
-
-      <View className="p-4">
-        <Text className="text-black text-2xl font-psemibold mb-4">
-          Hello, {username}!
-        </Text>
-        <Text className="text-black text-lg mb-4">
-          Email: {user?.email}
-        </Text>
-        <CustomButton
-          title="Logout"
-          handlePress={handleLogout}
-          containerStyles="mt-4"
-        />
-      </View>
-
-      {/* Location */}
-      <View style={styles.locationContainer}>
-        <Text style={styles.locationText}>Home</Text>
-        <Text style={styles.locationDetail}>Latitude: 12.9716, Longitude: 77.5946</Text>
-      </View>
-
-      {/* Previous Posts / Awareness */}
-      <View style={styles.postsContainer}>
-        <Text style={styles.title}>Previous Posts</Text>
-        <Button title="Raise Awareness" onPress={handleRaiseAwareness} />
-        <Text style={styles.postText}>No posts yet.</Text>
-      </View>
-
-      {/* Medical Data */}
-      <View style={styles.medicalDataContainer}>
-        <Text style={styles.title}>Medical Data</Text>
-        <Button title="Add Medical Data" onPress={handleAddMedicalData} />
-      </View>
-
-      {/* Saved Locations */}
-      <SavedLocationList locations={savedLocations} />
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 16,
+  safeArea: {
+    flex: 1,
     backgroundColor: '#ffffff',
+  },
+  container: {
+    padding: 16,
+  },
+  userInfo: {
+    padding: 16,
+  },
+  username: {
+    fontSize: 24,
+    fontWeight: '600',
+    marginBottom: 4,
+    color: '#000',
+  },
+  email: {
+    fontSize: 18,
+    marginBottom: 16,
+    color: '#000',
   },
   locationContainer: {
     marginVertical: 16,

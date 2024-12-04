@@ -22,8 +22,6 @@ const Home = () => {
   
   const [airPollutionData, setAirPollutionData] = useState<AirPollutionData | null>(null);
   const [waterQualityData, setWaterQualityData] = useState<WaterQualityData | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [locationKey, setLocationKey] = useState(null); 
   const [stateCode, setStateCode] = useState('');
 
@@ -34,13 +32,10 @@ const Home = () => {
     const hasPermission = await requestLocationPermission();
     if (hasPermission) {
       try {
-        setIsLoading(true);
         const currentLocation = await getCurrentPositionAsync({ accuracy: Accuracy.High });
         setLocation(currentLocation);
       } catch (error) {
         console.error('Error getting location:', error);
-      } finally {
-        setIsLoading(false);
       }
     }
   };
