@@ -24,7 +24,7 @@ const fetchPollenData = async (locationKey:number | null) => {
             Tree:airAndPollenData[4].Category
         };
     } catch (err) {
-        console.error("Failed to fetch pollen data");
+        console.log("Failed to fetch pollen data");        
     }
 }
 

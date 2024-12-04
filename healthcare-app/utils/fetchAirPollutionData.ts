@@ -27,7 +27,7 @@ const fetchAirPollutionData = async (lat: number, lon: number): Promise<AirPollu
         pm10: data.components.pm10,   // PM10 concentration
     };
   } catch (error) {
-    console.error('Error fetching air quality data:', error);
+    console.log('Error fetching air quality data');
     return null;
   }
 };

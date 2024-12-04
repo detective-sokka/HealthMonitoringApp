@@ -12,7 +12,7 @@ const fetchLocationKeyData = async (location:LocationObject | null)  => {
         );
         return locationKey.data;
       } catch (error) {
-        console.error('Error fetching location data:', error);
+        console.log('Error fetching location data');
         return null;
       }
 }
