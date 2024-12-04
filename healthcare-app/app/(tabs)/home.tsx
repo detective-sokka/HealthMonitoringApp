@@ -5,8 +5,9 @@ import Tile from '../../components/Tile';
 import { Accuracy, LocationObject, getCurrentPositionAsync } from 'expo-location';
 import requestLocationPermission from '../../utils/requestLocationPermission';
 import fetchAirPollutionData, { AirPollutionData } from '../../utils/fetchAirPollutionData';
-import fetchLocationKey from '../../utils/fetchLocationKey';
 import fetchPollenData, { PollenData } from '../../utils/fetchPollenData';
+import fetchLocationKeyData from '../../utils/fetchLocationKeyData';
+import fetchCovidData, { CovidData } from '../../utils/fetchCovidData';
 
 const Home = () => {
   const [location, setLocation] = useState<LocationObject | null>(null);
@@ -14,28 +15,17 @@ const Home = () => {
   const [airPollutionData, setAirPollutionData] = useState<AirPollutionData | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [locationKey, setLocationKey] = useState(null);
+  const [locationKey, setLocationKey] = useState(null); 
+  const [stateCode, setStateCode] = useState('');
 
   const [pollenData, setPollenData] = useState<PollenData | null>(null);
+  const [covidData, setCovidData] = useState<CovidData|null>(null);
 
   useEffect(() => {
     getLocation();
   }, []);
 
-  useEffect(() => {
-    if (location)
-    {
-      fetchAirPollutionData(
-        location.coords.latitude,
-        location.coords.longitude
-      ).then((data) => {
-        if (data) {
-          setAirPollutionData(data);
-        }
-      }).catch((error) => console.error('Error in getLocation:', error));
-    } 
-  }, [location]);
-
+  // Request device location
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
     if (hasPermission) {
@@ -51,20 +41,53 @@ const Home = () => {
     }
   };
 
+  // Get Air Pollution data based on co-ordinates
   useEffect(() => {
-    fetchLocationKey(location).then((key) => {
-      setLocationKey(key);
-      console.log("Location key is : ", key);
+    if (location)
+    {
+      fetchAirPollutionData(
+        location.coords.latitude,
+        location.coords.longitude
+      ).then((data) => {
+        if (data) {
+          setAirPollutionData(data);
+        }
+      }).catch((error) => console.error('Error in getLocation:', error));
+    } 
+  }, [location]);
+
+  // Set Location Key and State Code based on co-ordinates
+  useEffect(() => {
+    fetchLocationKeyData(location).then((data) => {
+      if (data)
+      {
+        setLocationKey(data.Key);
+        setStateCode(data.AdministrativeArea.ID);
+        console.log("Location key is : ", data.Key);
+      }        
     }).catch((error) => console.error('Error in getLocation:', error));
   }, [location]);
 
+  // Get Pollen Data based on co-ordinates
   useEffect(() => { 
-    fetchPollenData(locationKey).then((data) => {
-      if (data)
-        setPollenData(data);
-    }).catch((error) => console.error('Error in fetchPollenData :', error));
+    if (locationKey) {
+      fetchPollenData(locationKey).then((data) => {
+        if (data)
+          setPollenData(data);
+      }).catch((error) => console.error('Error in fetchPollenData :', error));
+    }    
   }, [locationKey]);
 
+  // Fetch COVID data based on State code
+  useEffect(() => {
+    if (stateCode)
+    {
+      fetchCovidData(stateCode).then((data) => {
+        if (data)
+          setCovidData(data);
+      }).catch((error) => console.error('Error in fetchCovidData :', error));
+    }
+  }, [stateCode]);
 
   const handleSearch = () => {
     console.log('Search:', searchQuery);
@@ -125,6 +148,17 @@ const Home = () => {
             </View>
             :
             <></>
+          }
+          {
+            covidData ? 
+            <View>
+              <Text>population: {covidData.population}</Text>
+              <Text>newCases: {covidData.newCases}</Text>
+              <Text>testPositivityRatio: {covidData.testPositivityRatio}</Text>
+              <Text>vaccinationRatio: {covidData.vaccinationRatio}</Text>
+            </View>
+            :
+            <View></View>
           }          
         </View>
       </ScrollView>
