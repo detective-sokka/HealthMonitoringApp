@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
@@ -8,6 +8,7 @@ import { images } from "../../constants";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
+import { useAuth } from '../../context/AuthContext';
 
 
 interface FormData {
@@ -17,6 +18,15 @@ interface FormData {
 }
 
 const SignUp = () => {
+  const { user } = useAuth();
+  
+  useEffect(() => {
+    if (user) {
+      router.replace("/home");
+    }
+  }, [user]);
+
+
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
   const [form, setForm] = useState<FormData>({
     username: "",

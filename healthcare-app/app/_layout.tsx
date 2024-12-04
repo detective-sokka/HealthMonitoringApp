@@ -1,13 +1,14 @@
+import React, { useEffect } from 'react';
 import { SplashScreen, Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { AuthProvider } from '../context/AuthContext';
 import "../global.css";
-import { useFonts } from 'expo-font'
-import { useEffect } from 'react';
-import React from 'react';
+import useProtectedRoute from './_protected';
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-
+  
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -19,27 +20,28 @@ const RootLayout = () => {
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
-  
+
+  useProtectedRoute();
+
   useEffect(() => {
     if (error) throw error;
-  
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, error]);
-  
+
   if (!fontsLoaded && !error) {
     return null;
   }
 
-
-
   return (
-    <Stack>
-        <Stack.Screen name='index' options={{headerShown:false}} />  
-    </Stack>
-  )
-}
+    <AuthProvider>
+      <Stack>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </AuthProvider>
+  );
+};
 
-export default RootLayout
-
+export default RootLayout;

@@ -1,10 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView, Alert } from 'react-native';
 import ProfileHeader from '../../components/ProfileHeader';
 import ButtonRow from '../../components/ButtonRow';
 import SavedLocationList from '../../components/SavedLocationList';
+import { useAuth } from '../../context/AuthContext';
+import { router } from 'expo-router';
+import CustomButton from '../../components/CustomButton';
 
 const Profile = () => {
+
+  const { user, signOut } = useAuth();
+  console.log('Current user:', user);
+  const username = user?.email?.split('@')[0] || 'User';
+  console.log('Username:', username);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.replace("/sign-in");
+    } catch (error) {
+      Alert.alert("Error", "Failed to log out");
+    }
+  };
+
+  
   const savedLocations = ['Latitude: 12.9716, Longitude: 77.5946', 'Latitude: 34.0522, Longitude: -118.2437'];
 
   const handleUpdateProfile = () => console.log('Update Profile');
@@ -30,6 +49,20 @@ const Profile = () => {
           { title: 'Edit', onPress: handleEdit },
         ]}
       />
+
+      <View className="p-4">
+        <Text className="text-black text-2xl font-psemibold mb-4">
+          Hello, {username}!
+        </Text>
+        <Text className="text-black text-lg mb-4">
+          Email: {user?.email}
+        </Text>
+        <CustomButton
+          title="Logout"
+          handlePress={handleLogout}
+          containerStyles="mt-4"
+        />
+      </View>
 
       {/* Location */}
       <View style={styles.locationContainer}>

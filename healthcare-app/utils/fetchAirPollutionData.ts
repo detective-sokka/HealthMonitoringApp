@@ -17,7 +17,7 @@ export interface AirPollutionData {
   
 const fetchAirPollutionData = async (lat: number, lon: number): Promise<AirPollutionData | null> => {
   try {
-    console.log(lat, " ", lon, " ", API_KEY)
+    console.log(`latitute:${lat}, longitude:${lon}`);
     const response = await axios.get(
       `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`
     );
