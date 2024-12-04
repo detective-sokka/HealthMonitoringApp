@@ -21,8 +21,9 @@ const SeveritySlider: React.FC<SeveritySliderProps> = ({ value, onChange }) => {
         minimumTrackTintColor="#FF6347"
         maximumTrackTintColor="#DDD"
         thumbTintColor="#FF6347"
+        testID="slider"
       />
-      <Text style={styles.value}>Severity: {value}</Text>
+      <Text style={styles.value} testID="severity-text">Severity: {value}</Text>
     </View>
   );
 };

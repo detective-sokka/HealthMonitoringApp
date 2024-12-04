@@ -17,7 +17,6 @@ export interface AirPollutionData {
   
 const fetchAirPollutionData = async (lat: number, lon: number): Promise<AirPollutionData | null> => {
   try {
-    console.log(`latitute:${lat}, longitude:${lon}`);
     const response = await axios.get(
       `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`
     );
@@ -28,7 +27,7 @@ const fetchAirPollutionData = async (lat: number, lon: number): Promise<AirPollu
         pm10: data.components.pm10,   // PM10 concentration
     };
   } catch (error) {
-    console.error('Error fetching air quality data:', error);
+    console.log('Error fetching air quality data');
     return null;
   }
 };

@@ -16,7 +16,6 @@ const fetchPollenData = async (locationKey:number | null) => {
         const response = await axios.get(
           `http://dataservice.accuweather.com/forecasts/v1/daily/1day/${locationKey}?apikey=${API_KEY}&details=true`
         );
-        console.log("Fill API response is : ", response.data);
         const airAndPollenData = response.data.DailyForecasts[0].AirAndPollen;
         return {
             Grass: airAndPollenData[1].Category,
@@ -25,7 +24,8 @@ const fetchPollenData = async (locationKey:number | null) => {
             Tree:airAndPollenData[4].Category
         };
     } catch (err) {
-        console.error("Failed to fetch pollen data");
+        console.log("Failed to fetch pollen data");        
+        return null;
     }
 }
 

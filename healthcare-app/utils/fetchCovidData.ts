@@ -22,7 +22,7 @@ const fetchCovidData = async (stateCode: string) => {
             vaccinationRatio: data.metrics.vaccinationsCompletedRatio
         };
     } catch (error) {
-        console.error('Error fetching COVID data:', error);
+        console.log('Error fetching COVID data');
         return null;
     }
 }

@@ -8,7 +8,7 @@ import fetchPollenData, { PollenData } from '../../utils/fetchPollenData';
 import fetchLocationKeyData from '../../utils/fetchLocationKeyData';
 import fetchCovidData, { CovidData } from '../../utils/fetchCovidData';
 import { useAuth } from '../../context/AuthContext';
-import fetchWaterQualityData, { WaterQualityData } from '../../utils/fetchWaterPollutionData';
+import fetchWaterQualityData, { WaterQualityData } from '../../utils/fetchWaterQualityData';
 import Tile from '../../components/Tile';
 import Section from '../../components/Section';
 

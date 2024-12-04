@@ -43,6 +43,7 @@ const FormField: React.FC<FormFieldProps> = ({
               source={!showPassword ? icons.eye : icons.eyeHide}
               className="w-6 h-6"
               resizeMode="contain"
+              testID={!showPassword ? "eye-icon" : "eyeHide-icon"}  // Correctly set the testID
             />
           </TouchableOpacity>
         )}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { parse } from "csv-parse/dist/esm/sync";
+import csvtojson from "csvtojson";
 
 export interface WaterQualityData {
   pH: number;
@@ -18,10 +18,12 @@ const fetchWaterQualityData = async (
       { responseType: "text" }
     );
 
-    const records = parse(response.data, {
-      columns: true,
-      skip_empty_lines: true,
-    });
+    const records = await csvtojson({
+      noheader: false,       // Use the first row as headers
+      trim: true,            // Trim whitespace from values
+      ignoreEmpty: true      // Skip empty lines
+    }).fromString(response.data);
+    
 
     let pHSum = 0,
       pHCount = 0;
@@ -60,7 +62,7 @@ const fetchWaterQualityData = async (
       } MPN/100mL`,
     };
   } catch (error) {
-    console.error("Error fetching water quality data:", error);
+    console.log("Error fetching water quality data");
     return null;
   }
 };

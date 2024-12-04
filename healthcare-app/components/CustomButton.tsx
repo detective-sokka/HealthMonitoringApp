@@ -31,6 +31,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
 
       {isLoading && (
         <ActivityIndicator
+          testID="loading-indicator"
           animating={isLoading}
           color="#fff"
           size="small"
