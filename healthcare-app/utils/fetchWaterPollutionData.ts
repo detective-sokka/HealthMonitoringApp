@@ -54,7 +54,7 @@ const fetchWaterQualityData = async (
 
     return {
       pH: pHCount > 0 ? Number((pHSum / pHCount).toFixed(2)) : 0,
-      lead: `${leadCount > 0 ? Math.round(leadSum / leadCount) : 0} ug/L`,
+      lead: `${leadCount > 0 ? Math.round(leadSum / leadCount) : 0} µg/L`,
       eColi: `${
         eColiCount > 0 ? Math.round(eColiSum / eColiCount) : 0
       } MPN/100mL`,
