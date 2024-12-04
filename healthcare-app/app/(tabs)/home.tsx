@@ -5,8 +5,8 @@ import Tile from '../../components/Tile';
 import { Accuracy, LocationObject, getCurrentPositionAsync } from 'expo-location';
 import requestLocationPermission from '../../utils/requestLocationPermission';
 import fetchAirPollutionData, { AirPollutionData } from '../../utils/fetchAirPollutionData';
-import fetchLocationKey from '../../utils/fetchLocationKey';
 import fetchPollenData, { PollenData } from '../../utils/fetchPollenData';
+import fetchLocationKeyData from '../../utils/fetchLocationKeyData';
 
 const Home = () => {
   const [location, setLocation] = useState<LocationObject | null>(null);
@@ -14,7 +14,8 @@ const Home = () => {
   const [airPollutionData, setAirPollutionData] = useState<AirPollutionData | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [locationKey, setLocationKey] = useState(null);
+  const [locationKey, setLocationKey] = useState(null); 
+  const [stateCode, setStateCode] = useState('');
 
   const [pollenData, setPollenData] = useState<PollenData | null>(null);
 
@@ -52,9 +53,13 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchLocationKey(location).then((key) => {
-      setLocationKey(key);
-      console.log("Location key is : ", key);
+    fetchLocationKeyData(location).then((data) => {
+      if (data)
+      {
+        setLocationKey(data.Key);
+        setStateCode(data.AdministrativeArea.ID);
+        console.log("Location key is : ", data.Key);
+      }        
     }).catch((error) => console.error('Error in getLocation:', error));
   }, [location]);
 
