@@ -25,6 +25,7 @@ const fetchPollenData = async (locationKey:number | null) => {
         };
     } catch (err) {
         console.log("Failed to fetch pollen data");        
+        return null;
     }
 }
 
