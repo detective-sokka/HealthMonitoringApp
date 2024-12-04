@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   value: {
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 8,
