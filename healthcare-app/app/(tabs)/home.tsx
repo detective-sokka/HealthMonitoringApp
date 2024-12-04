@@ -23,20 +23,7 @@ const Home = () => {
     getLocation();
   }, []);
 
-  useEffect(() => {
-    if (location)
-    {
-      fetchAirPollutionData(
-        location.coords.latitude,
-        location.coords.longitude
-      ).then((data) => {
-        if (data) {
-          setAirPollutionData(data);
-        }
-      }).catch((error) => console.error('Error in getLocation:', error));
-    } 
-  }, [location]);
-
+  // Request device location
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
     if (hasPermission) {
@@ -51,6 +38,21 @@ const Home = () => {
       }
     }
   };
+
+  // Get Air Pollution data based on co-ordinates
+  useEffect(() => {
+    if (location)
+    {
+      fetchAirPollutionData(
+        location.coords.latitude,
+        location.coords.longitude
+      ).then((data) => {
+        if (data) {
+          setAirPollutionData(data);
+        }
+      }).catch((error) => console.error('Error in getLocation:', error));
+    } 
+  }, [location]);
 
   useEffect(() => {
     fetchLocationKeyData(location).then((data) => {
