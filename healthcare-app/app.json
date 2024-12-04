@@ -2,7 +2,7 @@
   "expo": {
     "name": "healthcare-app",
     "slug": "healthcare-app",
-    "scheme" : "healthcare-app",
+    "scheme": "healthcare-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/health-care-app-icon.png",
@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.healthcareapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +28,9 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "experiments": {
+      "newArchEnabled": true
+    }
   }
 }

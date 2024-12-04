@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Alert, Image } from "react-native";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from "expo-router";
 
@@ -9,6 +9,7 @@ import CustomButton from '../../components/CustomButton';
 
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import { FIREBASE_AUTH } from "../../firebaseConfig";
+import { useAuth } from "../../context/AuthContext";
 
 interface FormData {
   email: string;
@@ -16,6 +17,14 @@ interface FormData {
 }
 
 const SignIn = () => {
+  const { user } = useAuth();
+  
+  useEffect(() => {
+    if (user) {
+      router.replace("/home");
+    }
+  }, [user]);
+
   const [form, setForm] = useState<FormData>({ email: "", password: "" });
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
 

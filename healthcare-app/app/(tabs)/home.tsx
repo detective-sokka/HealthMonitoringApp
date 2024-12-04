@@ -8,11 +8,18 @@ import fetchAirPollutionData, { AirPollutionData } from '../../utils/fetchAirPol
 import fetchPollenData, { PollenData } from '../../utils/fetchPollenData';
 import fetchLocationKeyData from '../../utils/fetchLocationKeyData';
 import fetchCovidData, { CovidData } from '../../utils/fetchCovidData';
+import { useAuth } from '../../context/AuthContext';
+import fetchWaterQualityData, { WaterQualityData } from '../../utils/fetchWaterPollutionData';
 
 const Home = () => {
+
+  const { user } = useAuth();
+  const username = user?.email?.split('@')[0] || 'User';
+  
   const [location, setLocation] = useState<LocationObject | null>(null);
   
   const [airPollutionData, setAirPollutionData] = useState<AirPollutionData | null>(null);
+  const [waterQualityData, setWaterQualityData] = useState<WaterQualityData | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [locationKey, setLocationKey] = useState(null); 
@@ -25,7 +32,29 @@ const Home = () => {
     getLocation();
   }, []);
 
-  // Request device location
+  useEffect(() => {
+    if (location)
+    {
+      fetchAirPollutionData(
+        location.coords.latitude,
+        location.coords.longitude
+      ).then((data) => {
+        if (data) {
+          setAirPollutionData(data);
+        }
+      }).catch((error) => console.error('Error fetching air pollution data:', error));
+
+      fetchWaterQualityData(
+        location.coords.latitude,
+        location.coords.longitude
+      ).then((data) => {
+        if (data) {
+          setWaterQualityData(data);
+        }
+      }).catch((error) => console.error('Error fetching water quality data:', error));
+    } 
+  }, [location]);
+
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
     if (hasPermission) {
@@ -40,21 +69,6 @@ const Home = () => {
       }
     }
   };
-
-  // Get Air Pollution data based on co-ordinates
-  useEffect(() => {
-    if (location)
-    {
-      fetchAirPollutionData(
-        location.coords.latitude,
-        location.coords.longitude
-      ).then((data) => {
-        if (data) {
-          setAirPollutionData(data);
-        }
-      }).catch((error) => console.error('Error in getLocation:', error));
-    } 
-  }, [location]);
 
   // Set Location Key and State Code based on co-ordinates
   useEffect(() => {
@@ -156,6 +170,16 @@ const Home = () => {
               <Text>newCases: {covidData.newCases}</Text>
               <Text>testPositivityRatio: {covidData.testPositivityRatio}</Text>
               <Text>vaccinationRatio: {covidData.vaccinationRatio}</Text>
+            </View>
+            :
+            <View></View>
+          } 
+          {
+            waterQualityData ? 
+            <View>
+              <Text>pH: {waterQualityData.pH}</Text>
+              <Text>Lead: {waterQualityData.lead}</Text>
+              <Text>E. Coli: {waterQualityData.eColi}</Text>
             </View>
             :
             <View></View>
