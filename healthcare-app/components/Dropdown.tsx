@@ -29,6 +29,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       <TouchableOpacity
         style={styles.dropdown}
         onPress={() => setModalVisible(true)}
+        testID="dropdown-button"
       >
         <Text style={styles.selectedOption}>
           {selectedOption || "Select an option"}
@@ -40,7 +41,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalBackground}>
+        <View style={styles.modalBackground} testID="modal-background">
           <View style={styles.modalContainer}>
             <FlatList
               data={options}

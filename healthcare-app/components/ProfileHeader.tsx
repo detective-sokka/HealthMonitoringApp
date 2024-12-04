@@ -20,7 +20,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ name, photo, email, onSav
 
   return (
     <View style={styles.header}>
-      <Image source={photo} style={styles.photo} />
       <View style={styles.info}>
         {isEditing ? (
           <View style={styles.editContainer}>
@@ -44,6 +43,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ name, photo, email, onSav
         )}
         <Text style={styles.email}>{email}</Text>
       </View>
+      <Image source={photo} style={styles.photo} />
     </View>
   );
 };
