@@ -7,6 +7,7 @@ import requestLocationPermission from '../../utils/requestLocationPermission';
 import fetchAirPollutionData, { AirPollutionData } from '../../utils/fetchAirPollutionData';
 import fetchPollenData, { PollenData } from '../../utils/fetchPollenData';
 import fetchLocationKeyData from '../../utils/fetchLocationKeyData';
+import fetchCovidData, { CovidData } from '../../utils/fetchCovidData';
 
 const Home = () => {
   const [location, setLocation] = useState<LocationObject | null>(null);
@@ -18,6 +19,7 @@ const Home = () => {
   const [stateCode, setStateCode] = useState('');
 
   const [pollenData, setPollenData] = useState<PollenData | null>(null);
+  const [covidData, setCovidData] = useState<CovidData|null>(null);
 
   useEffect(() => {
     getLocation();
@@ -76,6 +78,16 @@ const Home = () => {
     }    
   }, [locationKey]);
 
+  // Fetch COVID data based on State code
+  useEffect(() => {
+    if (stateCode)
+    {
+      fetchCovidData(stateCode).then((data) => {
+        if (data)
+          setCovidData(data);
+      }).catch((error) => console.error('Error in fetchCovidData :', error));
+    }
+  }, [stateCode]);
 
   const handleSearch = () => {
     console.log('Search:', searchQuery);
@@ -136,6 +148,17 @@ const Home = () => {
             </View>
             :
             <></>
+          }
+          {
+            covidData ? 
+            <View>
+              <Text>population: {covidData.population}</Text>
+              <Text>newCases: {covidData.newCases}</Text>
+              <Text>testPositivityRatio: {covidData.testPositivityRatio}</Text>
+              <Text>vaccinationRatio: {covidData.vaccinationRatio}</Text>
+            </View>
+            :
+            <View></View>
           }          
         </View>
       </ScrollView>
