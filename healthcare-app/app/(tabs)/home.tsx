@@ -54,6 +54,7 @@ const Home = () => {
     } 
   }, [location]);
 
+  // Set Location Key and State Code based on co-ordinates
   useEffect(() => {
     fetchLocationKeyData(location).then((data) => {
       if (data)
@@ -65,11 +66,14 @@ const Home = () => {
     }).catch((error) => console.error('Error in getLocation:', error));
   }, [location]);
 
+  // Get Pollen Data based on co-ordinates
   useEffect(() => { 
-    fetchPollenData(locationKey).then((data) => {
-      if (data)
-        setPollenData(data);
-    }).catch((error) => console.error('Error in fetchPollenData :', error));
+    if (locationKey) {
+      fetchPollenData(locationKey).then((data) => {
+        if (data)
+          setPollenData(data);
+      }).catch((error) => console.error('Error in fetchPollenData :', error));
+    }    
   }, [locationKey]);
 
 
