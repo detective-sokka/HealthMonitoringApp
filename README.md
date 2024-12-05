@@ -16,3 +16,5 @@ To run unit tests:
 To run detox integration tests:
 - `detox build --configuration android.emu.debug`
 - `detox test --configuration android.emu.debug`
+
+The `documentation` directory contains the IEC 62304 documentation.
