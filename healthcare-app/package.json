@@ -20,7 +20,7 @@
     "csv-parse": "^5.6.0",
     "csvtojson": "^2.0.10",
     "dotenv": "^16.4.5",
-    "expo": "~52.0.14",
+    "expo": "^52.0.17",
     "expo-constants": "^17.0.3",
     "expo-linking": "^7.0.3",
     "expo-location": "~18.0.3",
