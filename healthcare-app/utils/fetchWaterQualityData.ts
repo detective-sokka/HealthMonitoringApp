@@ -14,7 +14,7 @@ const fetchWaterQualityData = async (
   try {
     console.log(`latitude:${lat}, longitude:${lon}`);
     const response = await axios.get(
-      "https://www.waterqualitydata.us/data/Result/search?within=10&lat=42.3264462&long=-71.0951289&mimeType=csv&providers=NWIS&providers=STORET&characteristicName=pH&characteristicName=Lead&characteristicName=Escherichia%20coli",
+      `https://www.waterqualitydata.us/data/Result/search?within=10&lat=${lat}&long=${lon}&mimeType=csv&providers=NWIS&providers=STORET&characteristicName=pH&characteristicName=Lead&characteristicName=Escherichia%20coli`,
       { responseType: "text" }
     );
 
