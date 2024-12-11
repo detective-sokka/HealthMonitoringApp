@@ -12,6 +12,8 @@ import fetchWaterQualityData, { WaterQualityData } from '../../utils/fetchWaterQ
 import Tile from '../../components/Tile';
 import Section from '../../components/Section';
 
+import { configureNotifications, registerForPushNotificationsAsync, sendNotification } from '../../utils/NotificationService';
+import { checkThresholdsAndNotify } from '../../utils/AlertService';
 
 const Home = () => {
 
@@ -19,14 +21,42 @@ const Home = () => {
   const username = user?.email?.split('@')[0] || 'User';
   
   const [location, setLocation] = useState<LocationObject | null>(null);
-  
   const [airPollutionData, setAirPollutionData] = useState<AirPollutionData | null>(null);
   const [waterQualityData, setWaterQualityData] = useState<WaterQualityData | null>(null);
   const [locationKey, setLocationKey] = useState(null); 
   const [stateCode, setStateCode] = useState('');
-
   const [pollenData, setPollenData] = useState<PollenData | null>(null);
   const [covidData, setCovidData] = useState<CovidData|null>(null);
+
+  const sendInitialStatusNotifications = async () => {
+    if (airPollutionData) {
+      await sendNotification(
+        'Current Air Quality Status',
+        `PM10: ${airPollutionData.pm10.toFixed(2)}\nPM2.5: ${airPollutionData.pm2_5.toFixed(2)}\nAQI: ${airPollutionData.aqi}`
+      );
+    }
+
+    if (waterQualityData) {
+      await sendNotification(
+        'Current Water Quality Status',
+        `pH: ${waterQualityData.pH}\nLead: ${waterQualityData.lead}\nE. Coli: ${waterQualityData.eColi}`
+      );
+    }
+
+    if (pollenData) {
+      await sendNotification(
+        'Current Pollen Status',
+        `Tree: ${pollenData.Tree}\nGrass: ${pollenData.Grass}\nRagweed: ${pollenData.Ragweed}\nMold: ${pollenData.Mold}`
+      );
+    }
+
+    if (covidData) {
+      await sendNotification(
+        'Current COVID-19 Status',
+        `New Cases: ${covidData.newCases}\nTest Positivity: ${(covidData.testPositivityRatio * 100).toFixed(2)}%\nVaccination Rate: ${(covidData.vaccinationRatio * 100).toFixed(2)}%`
+      );
+    }
+  };
 
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
@@ -40,63 +70,73 @@ const Home = () => {
     }
   };
 
+  // Initialize notifications
+  useEffect(() => {
+    configureNotifications();
+    registerForPushNotificationsAsync();
+  }, []);
+
+  // Get location
   useEffect(() => {
     getLocation();
   }, []);
 
+  // Fetch data based on location
   useEffect(() => {
-    
     if (location) {
-        // Set Location Key and State Code based on co-ordinates
-        fetchLocationKeyData(location).then((data) => {
-          if (data)
-          {
-            setLocationKey(data.Key);
-            setStateCode(data.AdministrativeArea.ID);
-            console.log("Location key is : ", data.Key);
-          }        
-        }).catch((error) => console.error('Error in getLocation:', error));
+      fetchLocationKeyData(location).then((data) => {
+        if (data) {
+          setLocationKey(data.Key);
+          setStateCode(data.AdministrativeArea.ID);
+        }        
+      }).catch((error) => console.error('Error in getLocation:', error));
 
-        fetchAirPollutionData(
-          location.coords.latitude,
-          location.coords.longitude
-        ).then((data) => {
-          if (data) {
-            setAirPollutionData(data);
-          }
-        }).catch((error) => console.error('Error fetching air pollution data:', error));
-  
-        fetchWaterQualityData(
-          location.coords.latitude,
-          location.coords.longitude
-        ).then((data) => {
-          if (data) {
-            setWaterQualityData(data);
-          }
-        }).catch((error) => console.error('Error fetching water quality data:', error));
-      } 
+      fetchAirPollutionData(
+        location.coords.latitude,
+        location.coords.longitude
+      ).then((data) => {
+        if (data) setAirPollutionData(data);
+      }).catch((error) => console.error('Error fetching air pollution data:', error));
+
+      fetchWaterQualityData(
+        location.coords.latitude,
+        location.coords.longitude
+      ).then((data) => {
+        if (data) setWaterQualityData(data);
+      }).catch((error) => console.error('Error fetching water quality data:', error));
+    } 
   }, [location]);
 
-  // Get Pollen Data based on co-ordinates
+  // Get Pollen Data
   useEffect(() => { 
     if (locationKey) {
       fetchPollenData(locationKey).then((data) => {
-        if (data)
-          setPollenData(data);
+        if (data) setPollenData(data);
       }).catch((error) => console.error('Error in fetchPollenData :', error));
     }    
   }, [locationKey]);
 
-  // Fetch COVID data based on State code
+  // Get COVID data
   useEffect(() => {
-    if (stateCode)
-    {
+    if (stateCode) {
       fetchCovidData(stateCode).then((data) => {
-        if (data)
-          setCovidData(data);
+        if (data) setCovidData(data);
       }).catch((error) => console.error('Error in fetchCovidData :', error));
     }
   }, [stateCode]);
+
+  // Send initial status notifications and check thresholds
+  useEffect(() => {
+    if (airPollutionData && waterQualityData && pollenData && covidData) {
+      sendInitialStatusNotifications();
+      checkThresholdsAndNotify({
+        airPollutionData,
+        waterQualityData,
+        pollenData,
+        covidData
+      });
+    }
+  }, [airPollutionData, waterQualityData, pollenData, covidData]);
 
 
   const colorSchemes = {
