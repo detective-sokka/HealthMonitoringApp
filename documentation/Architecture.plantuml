@@ -1,0 +1,113 @@
+@startuml
+
+' Define React Native App components
+package "React Native App" {
+    class App {
+        +render()
+        +navigateToSignIn()
+        +navigateToHome()
+    }
+
+    class SignIn {
+        +render()
+        +submit()
+        +navigateToHome()
+        +showError(message: string)
+    }
+
+    class SignUp {
+        +render()
+        +submit()
+        +navigateToHome()
+        +showError(message: string)
+    }
+
+    class CustomButton {
+        +render()
+        +handlePress()
+    }
+
+    class FormField {
+        +render()
+        +handleChangeText()
+    }
+
+    class AuthContext {
+        +user
+        +useAuth()
+    }
+
+    App --> SignIn : "Navigates to"
+    App --> SignUp : "Navigates to"
+    SignIn --> AuthContext : "uses"
+    SignUp --> AuthContext : "uses"
+    SignIn --> CustomButton : "uses"
+    SignUp --> CustomButton : "uses"
+    SignIn --> FormField : "uses"
+    SignUp --> FormField : "uses"
+}
+
+' Define Firebase Authentication Integration
+package "Firebase Authentication" {
+    class FIREBASE_AUTH {
+        +signInWithEmailAndPassword()
+        +createUserWithEmailAndPassword()
+    }
+
+    SignIn --> FIREBASE_AUTH : "calls signInWithEmailAndPassword"
+    SignUp --> FIREBASE_AUTH : "calls createUserWithEmailAndPassword"
+}
+
+' Define ButtonRow and API components
+package "React Native App" {
+    class ButtonRow {
+        +render()
+        +props: buttons
+    }
+
+    class Button {
+        +title
+        +onPress()
+    }
+
+    class API {
+        +fetchCovidData()
+        +fetchPollenData()
+        +fetchAirPollutionData()
+        +fetchWaterQualityData()
+    }
+
+    class AuthContext {
+        +user
+        +useAuth()
+    }
+
+    Home --> ButtonRow : "contains"
+    ButtonRow --> Button : "contains"
+    Home --> API : "uses"
+    Home --> AuthContext : "uses"
+}
+
+' Define API functions
+package "API Functions" {
+    class FetchCovidData {
+        +fetchCovidData()
+    }
+    class FetchPollenData {
+        +fetchPollenData()
+    }
+    class FetchAirPollutionData {
+        +fetchAirPollutionData()
+    }
+    class FetchWaterQualityData {
+        +fetchWaterQualityData()
+    }
+}
+
+' Define Relationships
+API --> FetchCovidData : "calls"
+API --> FetchPollenData : "calls"
+API --> FetchAirPollutionData : "calls"
+API --> FetchWaterQualityData : "calls"
+
+@enduml
