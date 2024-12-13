@@ -18,3 +18,6 @@ To run detox integration tests:
 - `detox test --configuration android.emu.debug`
 
 The `documentation` directory contains the IEC 62304 documentation.
+
+## Architecture
+<img src="./out/documentation/Architecture/Architecture.svg"/>
