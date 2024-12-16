@@ -21,8 +21,3 @@ The `documentation` directory contains the IEC 62304 documentation.
 
 ## Architecture
 <img src="./out/documentation/Architecture/Architecture.svg"/>
-
-### How is the architecture diagram generated?
-The code for the architecture diagram is in documentation/Architecture.plantuml. 
-
-You can use PlantUML plugin in VS Code to export the diagram.  
