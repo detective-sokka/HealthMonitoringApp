@@ -11,12 +11,8 @@ import React from 'react';
 export default function App() {
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#7B97A3", height: "100%" }}>
-      <ScrollView
-        contentContainerStyle={{
-          height: "100%",
-        }}
-      >
+    <SafeAreaView className="bg-primary h-full">
+      <ScrollView>
         <View className="w-full justify-center items-center min-h-[85vh] px-4">
           <Image
             source={images.logo}
